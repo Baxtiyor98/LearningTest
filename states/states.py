@@ -4,5 +4,6 @@ class Registration(StatesGroup):
     full_name = State()
     age = State()
     phone = State()
+    manzil = State()
 
 
