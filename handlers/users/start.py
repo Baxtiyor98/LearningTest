@@ -1,4 +1,5 @@
 from aiogram import types
+from aiogram.types import CallbackQuery
 from aiogram.dispatcher.filters.builtin import CommandStart
 from aiogram.dispatcher.storage import FSMContext
 from aiogram.types.message import ContentTypes
@@ -11,18 +12,22 @@ from loader import dp
 
 @dp.message_handler(CommandStart(),state='*')
 async def bot_start(message: types.Message):
-    # await message.answer(f"Salom, {message.from_user.full_name}!\n👉 Youtube: <a href='https://youtu.be/Ui91xOcFVmk'>Tashrif buyurish</a>")
-    # await message.answer("Assalom alaykum, to'liq ism familyangizni kiriting!!!",reply_markup=bolim())
     await message.answer("Assalom alaykum, to'liq ism familyangizni kiriting!!!")
     await Registration.full_name.set()
 
-@dp.message_handler(content_types=ContentTypes.TEXT, state=Registration.full_name)
-async def get_full_name(message: types.Message, state: FSMContext):
-    # a = await message.answer('salom')
-    # await a.delete()
-    await message.answer("Telefon nomeringizni kiriting!!!",reply_markup=contact)
-    await state.update_data({'full_name': message.text})
-    await message.delete()
+@dp.callback_query_handler(state=Registration.region)
+async def get_full_name(call: CallbackQuery, state: FSMContext):
+    # print(call.data.split('_')[1],call.message)
+    if call.data == 'Ortga':
+        await call.message.answer("To'liq ism familyangizni kiriting!!!")
+        await Registration.full_name.set()
+        await call.message.delete()
+        return ''
+    await call.answer(f"Siz {call.data.split('_')[1]}ni tanladingiz",show_alert=True)
+    # await call.answer(f"Siz {call.data.split('_')[1]}ni tanladingiz",show_alert=True)
+    await state.update_data({'region': call.data})
+    await call.message.delete()
+    await call.message.answer("Telefon nomeringizni kiriting!!!",reply_markup=contact)
     await Registration.phone.set()
 
 @dp.message_handler(content_types=ContentTypes.TEXT, state=Registration.phone)
