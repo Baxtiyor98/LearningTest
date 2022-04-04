@@ -37,8 +37,8 @@ async def bot_start2(call: CallbackQuery,state: FSMContext):
 async def son(call: CallbackQuery,state: FSMContext):
     print(call.data,1)
     if call.data == 'back':
-        await call.message.delete()
-        await call.message.answer("Viloyatingizni tanlang!",reply_markup=viloyat)
+        # await call.message.delete()
+        await call.message.edit_text('salom',reply_markup=viloyat)
         await Registration.test.set()
         return ''
     await call.answer(f"Siz {call.data}ni tanladingiz", show_alert=False)

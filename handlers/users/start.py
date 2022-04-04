@@ -6,8 +6,11 @@ from aiogram.types.message import ContentTypes
 from aiogram.types import ReplyKeyboardRemove
 from keyboards.default.regKey import contact,location,bolim,back
 from states.states import Registration
+from utils.db_api.database import DB_Commands
 
 from loader import dp
+
+db = DB_Commands()
 
 
 @dp.message_handler(CommandStart(),state='*')
